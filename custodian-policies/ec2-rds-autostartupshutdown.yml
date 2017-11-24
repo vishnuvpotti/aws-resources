@@ -1,0 +1,41 @@
+policies:
+  - name: stop-ec2-machines-on-schedule
+    mode:
+        type: periodic
+        schedule: "cron(30 6 ? * MON-FRI *)"
+        role: arn:aws:iam::[your aws ec2 ARN]
+    resource: ec2
+    filters:
+      - "tag:custodian": present
+    actions:
+      - stop
+  - name: start-ec2-machines-on-schedule
+    mode:
+        type: periodic
+        schedule: "cron(30 22 ? * SUN-THU *)"
+        role: arn:aws:iam::[your aws ec2 ARN]
+    resource: ec2
+    filters:
+      - "tag:custodian": present
+    actions:
+      - start
+  - name: stop-rds-machines-on-schedule
+    mode:
+        type: periodic
+        schedule: "cron(30 6 ? * MON-FRI *)"
+        role: arn:aws:iam::[your aws rds ARN]
+    resource: rds
+    filters:
+      - "tag:custodian": present
+    actions:
+      - stop
+  - name: start-rds-machines-on-schedule
+    mode:
+        type: periodic
+        schedule: "cron(30 22 ? * SUN-THU *)"
+        role: arn:aws:iam::[your aws rds ARN]
+    resource: rds
+    filters:
+      - "tag:custodian": present
+    actions:
+      - start
