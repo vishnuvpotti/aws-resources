@@ -1,0 +1,34 @@
+policies:
+  - name: delete-old-ebs-snapshots
+    mode:
+        type: periodic
+        schedule: "cron(05 5,9,11 ? * MON-FRI *)"
+        role: arn:aws:iam::[your aws role ARN]
+    resource: ebs-snapshot
+    filters:
+          - type: age
+            days: 1
+            op: ge
+          - type: value
+            key: Description
+            op: regex
+            value: ^(Automated,Backup,-?)\w+
+    actions:
+     - delete
+
+  - name: delete-old-rds-snapshots
+    mode:
+        type: periodic
+        schedule: "cron(05 5,9,11 ? * MON-FRI *)"
+        role: arn:aws:iam::[your aws role ARN]
+    resource: rds-snapshot
+    filters:
+      - type: age
+        days: 1
+        op: ge
+      - type: value
+        key: DBSnapshotIdentifier
+        op: regex
+        value: ^(backup-prodswapps?)\w+
+    actions:
+      - delete
