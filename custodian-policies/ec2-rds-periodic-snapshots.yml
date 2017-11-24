@@ -1,0 +1,23 @@
+policies:
+  - name: ec2-periodic-backup
+    mode:
+        type: periodic
+        schedule: "cron(00 2,8,11 ? * MON-FRI *)"
+        role: arn:aws:iam::[Your aws role url]
+    resource: ec2
+    filters:
+      - "tag:custodian": present
+    actions:
+      - type: snapshot
+        copy-tags:
+          - Name
+  - name: rds-periodic-backup
+    mode:
+        type: periodic
+        schedule: "cron(00 2,8,11 ? * MON-FRI *)"
+        role: arn:aws:iam::[Your aws role url]
+    resource: rds
+    filters:
+      - "tag:custodian": present
+    actions:
+      - type: snapshot
